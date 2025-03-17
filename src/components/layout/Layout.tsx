@@ -22,7 +22,7 @@ function LayoutContent({ children }: LayoutProps) {
       <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
       <footer className="bg-gray-900 text-gray-400 py-6 border-t border-gray-800">
         <div className="container mx-auto px-4 text-center">
-          <p>© 2023 Space Puzzle Game. All rights reserved.</p>
+          <p>© 2025 Space Puzzle Game. All rights reserved.</p>
           <div className="mt-2 flex justify-center space-x-4">
             <a href="#" className="text-[#F89213] hover:text-[#e07e0e]">
               Terms
