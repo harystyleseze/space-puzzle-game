@@ -23,7 +23,7 @@ export interface Web3ContextType {
   currentChainId: string | null;
   connectWallet: () => Promise<string>;
   disconnectWallet: () => Promise<boolean>;
-  switchNetwork: () => Promise<boolean>;
+  switchNetwork: (targetNetwork?: "mainnet" | "testnet") => Promise<boolean>;
   playerStats: any | null;
   badges: any[];
   topScores: any[];
@@ -183,9 +183,9 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Switch network function
-  const switchNetwork = async () => {
+  const switchNetwork = async (targetNetwork?: "mainnet" | "testnet") => {
     try {
-      const result = await switchToCorrectNetwork();
+      const result = await switchToCorrectNetwork(targetNetwork);
       return result;
     } catch (err: any) {
       console.error("Error switching network:", err);

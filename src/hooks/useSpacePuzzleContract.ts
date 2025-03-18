@@ -42,16 +42,8 @@ export function useSpacePuzzleContract() {
           const chainId = await getCurrentChainId();
           setCurrentChainId(chainId);
 
-          // Check if on expected network - just for informational purposes
-          const onExpectedNetwork = await isCorrectNetwork();
-          if (!onExpectedNetwork) {
-            const networkName = getNetworkName(chainId);
-            setNetworkError(
-              `You are connected to ${networkName}. Some features may only be available on specific networks.`
-            );
-          } else {
-            setNetworkError(null);
-          }
+          // No longer set network errors - both networks are allowed
+          setNetworkError(null);
 
           // Get signer
           const ethersSigner = ethersProvider.getSigner();
@@ -93,15 +85,8 @@ export function useSpacePuzzleContract() {
     if (typeof window !== "undefined" && window.ethereum) {
       const handleChainChanged = async (chainId: string) => {
         setCurrentChainId(chainId);
-        const onExpectedNetwork = await isCorrectNetwork();
-        if (!onExpectedNetwork) {
-          const networkName = getNetworkName(chainId);
-          setNetworkError(
-            `You are connected to ${networkName}. Some features may only be available on specific networks.`
-          );
-        } else {
-          setNetworkError(null);
-        }
+        // No longer set network errors - both networks are allowed
+        setNetworkError(null);
         window.location.reload();
       };
 
@@ -145,10 +130,12 @@ export function useSpacePuzzleContract() {
     }
   };
 
-  // Switch network function - now optional and explicit
-  const switchNetwork = async () => {
+  // Switch network function - now allows specifying which network
+  const switchNetwork = async (
+    targetNetwork: "mainnet" | "testnet" = "testnet"
+  ) => {
     try {
-      const result = await switchToCorrectNetwork();
+      const result = await switchToCorrectNetwork(targetNetwork);
       return result;
     } catch (err: any) {
       console.error("Error switching network:", err);

@@ -9,15 +9,20 @@ import {
 } from "@/utils/networkUtils";
 
 export default function NetworkWarning() {
+  // Always return null to never show the warning
+  return null;
+
+  // Original code is commented out below, but updated with the new parameter
+  /*
   const { networkError, isConnected, currentChainId, switchNetwork } =
     useWeb3();
   const [isLoading, setIsLoading] = React.useState(false);
   const [dismissed, setDismissed] = React.useState(false);
 
-  const handleSwitchNetwork = async () => {
+  const handleSwitchNetwork = async (targetNetwork: 'mainnet' | 'testnet' = 'testnet') => {
     setIsLoading(true);
     try {
-      await switchNetwork();
+      await switchNetwork(targetNetwork);
       // The page will reload automatically due to the chainChanged event listener
     } catch (error) {
       console.error("Failed to switch network:", error);
@@ -43,8 +48,8 @@ export default function NetworkWarning() {
   if (!isConnected || !networkError || dismissed) return null;
 
   const currentNetwork = getCurrentNetwork();
-  const networkName =
-    currentNetwork === NETWORKS.CORE_MAINNET ? "Core Mainnet" : "Core Testnet";
+  const currentNetworkName = getNetworkName(currentChainId);
+  const isMainnet = currentChainId === NETWORKS.CORE_MAINNET.chainId;
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-amber-600 text-white p-3 shadow-lg">
@@ -65,17 +70,17 @@ export default function NetworkWarning() {
             />
           </svg>
           <span className="font-medium">
-            You're currently on {networkName}. Some features may only be
+            You're currently on {currentNetworkName}. Some features may only be
             available on specific networks.
           </span>
         </div>
         <div className="flex space-x-2">
           <button
-            onClick={handleSwitchNetwork}
+            onClick={() => handleSwitchNetwork(isMainnet ? 'testnet' : 'mainnet')}
             disabled={isLoading}
             className="bg-white text-amber-600 px-4 py-1 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-50"
           >
-            {isLoading ? "Switching..." : "Switch Network"}
+            {isLoading ? "Switching..." : `Switch to ${isMainnet ? 'Testnet' : 'Mainnet'}`}
           </button>
           <button
             onClick={handleDismiss}
@@ -87,4 +92,5 @@ export default function NetworkWarning() {
       </div>
     </div>
   );
+  */
 }

@@ -56,21 +56,26 @@ export const getCurrentChainId = async (): Promise<string | null> => {
 };
 
 /**
- * Switch to the appropriate Core network based on environment configuration
+ * Switch to the specified Core network
  * This is now optional and only used when explicitly requested
+ * @param targetNetwork 'mainnet' or 'testnet' to specify which network to switch to
  */
-export const switchToCorrectNetwork = async (): Promise<boolean> => {
+export const switchToCorrectNetwork = async (
+  targetNetwork: "mainnet" | "testnet" = "testnet"
+): Promise<boolean> => {
   if (typeof window === "undefined" || !window.ethereum) {
     throw new Error("Ethereum provider not found. Please install MetaMask.");
   }
 
-  const currentNetwork = getCurrentNetwork();
+  // Choose the network based on the specified target
+  const network =
+    targetNetwork === "mainnet" ? NETWORKS.CORE_MAINNET : NETWORKS.CORE_TESTNET;
 
   try {
     // Try to switch to the network
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: currentNetwork.chainId }],
+      params: [{ chainId: network.chainId }],
     });
     return true;
   } catch (switchError: any) {
@@ -79,7 +84,7 @@ export const switchToCorrectNetwork = async (): Promise<boolean> => {
       try {
         await window.ethereum.request({
           method: "wallet_addEthereumChain",
-          params: [currentNetwork],
+          params: [network],
         });
         return true;
       } catch (addError) {
